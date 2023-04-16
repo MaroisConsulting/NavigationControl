@@ -1,5 +1,8 @@
 ﻿namespace Shared
 {
+    /// <summary>
+    /// Sample repo
+    /// </summary>
     public class Repository
     {
         public List<NavigationEntity> GetNavigationItems(NavigationItemType itemType)

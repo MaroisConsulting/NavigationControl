@@ -78,7 +78,6 @@ namespace NavigationContainer
             //var control = (NavigationPane)d;
         }
         #endregion
-
         #endregion
 
         #region CTOR

@@ -24,7 +24,6 @@ namespace Navigation
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-
         private List<NavigationPaneModel>? _NavigationPaneInfos;
         public List<NavigationPaneModel> NavigationPaneInfos
         {
