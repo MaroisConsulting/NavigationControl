@@ -92,7 +92,8 @@
 
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <ctrls:NavigationPane BorderBrush="Yellow" 
+                                        <ctrls:NavigationPane Items="{Binding Items}"
+                                                              BorderBrush="Yellow" 
                                                               BorderThickness="1"
                                                               Background="Red"
                                                               HorizontalAlignment="Stretch"

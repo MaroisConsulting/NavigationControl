@@ -12,18 +12,23 @@ namespace NavigationContainer
         private static Repository repository = new Repository();
         #endregion
 
-        #region Properties
-        private List<NavigationPane>? _ContainerItems;
-        public List<NavigationPane> ContainerItems
+        #region DP's
+        #region DP ContainerItems
+        public static readonly DependencyProperty ContainerItemsProperty =
+                    DependencyProperty.Register("ContainerItems",
+                    typeof(List<NavigationPane>),
+                    typeof(NavigationContainer),
+                    new PropertyMetadata(null, new PropertyChangedCallback(OnContainerItemsChanged)));
+
+        public List<NavigationPane>? ContainerItems
         {
-            get { return _ContainerItems; }
-            set
-            {
-                if (_ContainerItems != value)
-                {
-                    _ContainerItems = value;
-                }
-            }
+            get { return (List<NavigationPane>?)GetValue(ContainerItemsProperty); }
+            set { SetValue(ContainerItemsProperty, value); }
+        }
+
+        private static void OnContainerItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            //var control = (NavigationContainer)d;
         }
         #endregion
 
@@ -46,6 +51,7 @@ namespace NavigationContainer
             await control.Load();
         }
         #endregion
+        #endregion
 
         #region CTOR
         static NavigationContainer()
@@ -60,24 +66,29 @@ namespace NavigationContainer
         {
             if (NavigationPanes != null)
             {
-                ContainerItems = new List<NavigationPane>();
+                var items = new List<NavigationPane>();
 
                 List<Task> tasks = new List<Task>(NavigationPanes.Count);
                 foreach (var navigationPaneModel in NavigationPanes)
                 {
-                    tasks.Add(LoadPane(navigationPaneModel));
+                    tasks.Add(LoadPane(navigationPaneModel, items));
                 }
 
                 await Task.WhenAll(tasks);
+
+                if (items != null)
+                {
+                    ContainerItems =  new List<NavigationPane>(items);
+                }
             }
         }
 
-        private async Task LoadPane(NavigationPaneModel navigationPaneModel)
+        private async Task LoadPane(NavigationPaneModel navigationPaneModel, List<NavigationPane> containerItems)
         {
             // It's ok for data to be null here. There may be no data for that ItemType
             var data = await Task.Run(() => repository.GetNavigationItems(navigationPaneModel.NavigationItemType));
 
-            ContainerItems.Add(new NavigationPane
+            containerItems.Add(new NavigationPane
             {
                 Header = navigationPaneModel.Header ?? "",
                 Items = new ObservableCollection<NavigationEntity>(data)

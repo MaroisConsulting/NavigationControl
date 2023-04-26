@@ -22,8 +22,6 @@
                         {
                             Caption = $"Company {i}"
                         });
-
-                        Thread.Sleep(1000);
                     }
 
                     break;
@@ -35,8 +33,6 @@
                         {
                             Caption = $"Project {i}"
                         });
-
-                        Thread.Sleep(500);
                     }
 
                     break;
@@ -49,8 +45,6 @@
                         {
                             Caption = $"Employee {i}"
                         });
-
-                        Thread.Sleep(250);
                     }
                     break;
             }
