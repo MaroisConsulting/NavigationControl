@@ -10,6 +10,12 @@
     
     <Grid>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
         <nav:NavigationContainer Grid.Row="1" 
                                  Grid.Column="0"
                                  Margin="5"
@@ -18,8 +24,24 @@
                                  BorderBrush="Green"
                                  BorderThickness="1"
                                  NavigationPanes="{Binding NavigationPaneInfos}"
-                                 HorizontalAlignment="Left"
-                                 MinWidth="200"/>
+                                 HorizontalAlignment="Stretch"/>
+
+        <GridSplitter Grid.Row="3"
+                      Grid.Column="1"
+                      ShowsPreview="True"
+                      ResizeDirection="Columns"
+                      ResizeBehavior="PreviousAndNext"
+                      HorizontalAlignment="Stretch"
+                      Width="5"/>
+
+
+        <TabControl Grid.Row="0"
+                    Grid.Column="2">
+
+            <TabItem Header="Home"/>
+
+        </TabControl>
+            
     </Grid>
     
 </Window>
