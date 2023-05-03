@@ -79,7 +79,7 @@ namespace NavigationContainer
                     };
                     ContainerItems.Add(navigationPane);
 
-                    navigationPane.IsExpanded = navigationPaneModel.IsExpanded;
+                    //navigationPane.IsExpanded = navigationPaneModel.IsExpanded;
                 }
             }
         }

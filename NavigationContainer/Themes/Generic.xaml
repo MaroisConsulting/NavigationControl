@@ -21,7 +21,8 @@
                                   BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
                                   BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
 
                             <Grid>
                                 <ListBox ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}"

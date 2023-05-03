@@ -14,7 +14,7 @@ namespace NavigationContainer
         public static readonly DependencyProperty HeaderProperty =
                     DependencyProperty.Register("Header",
                     typeof(string),
-                    typeof(NavigationContainer),
+                    typeof(NavigationPane),
                     new PropertyMetadata("", new PropertyChangedCallback(OnHeaderChanged)));
 
         public string Header
