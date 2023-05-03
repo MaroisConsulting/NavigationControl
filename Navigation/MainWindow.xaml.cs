@@ -2,24 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Navigation
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -37,6 +23,7 @@ namespace Navigation
                 }
             }
         }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -45,10 +32,34 @@ namespace Navigation
 
             NavigationPaneInfos = new List<NavigationPaneModel>
             {
-                new NavigationPaneModel {Header = "Projects", NavigationItemType = NavigationItemType.Project},
-                new NavigationPaneModel {Header = "Inventory", NavigationItemType = NavigationItemType.Inventory},
-                new NavigationPaneModel {Header = "Companies" , NavigationItemType = NavigationItemType.Company},
-                new NavigationPaneModel {Header = "Employees", NavigationItemType = NavigationItemType.Employee},
+                new NavigationPaneModel
+                {
+                    Header = "Projects", 
+                    NavigationItemType = NavigationItemType.Project, 
+                    IsExpanded = true,
+                    DataSource = Repository.GetNavigationItems
+                },
+
+                new NavigationPaneModel
+                {
+                    Header = "Inventory", 
+                    NavigationItemType = NavigationItemType.Inventory,
+                    DataSource = Repository.GetNavigationItems
+                },
+
+                new NavigationPaneModel
+                {
+                    Header = "Companies" , 
+                    NavigationItemType = NavigationItemType.Company,
+                    DataSource = Repository.GetNavigationItems
+                },
+
+                new NavigationPaneModel
+                {
+                    Header = "Employees", 
+                    NavigationItemType = NavigationItemType.Employee,
+                    DataSource = Repository.GetNavigationItems
+                }
             };
         }
 

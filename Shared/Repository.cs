@@ -3,9 +3,9 @@
     /// <summary>
     /// Sample repo
     /// </summary>
-    public class Repository
+    public static class Repository
     {
-        public List<NavigationEntity> GetNavigationItems(NavigationItemType itemType)
+        public static List<NavigationEntity> GetNavigationItems(NavigationItemType itemType)
         {
             var results = new List<NavigationEntity>();
 

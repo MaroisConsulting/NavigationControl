@@ -21,8 +21,7 @@
                                   BorderBrush="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}"
                                   BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  IsExpanded="True">
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
 
                             <Grid>
                                 <ListBox ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}"
@@ -74,8 +73,7 @@
 
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <ctrls:NavigationPane 
-                                                              BorderBrush="Orange" 
+                                        <ctrls:NavigationPane BorderBrush="Orange" 
                                                               BorderThickness="3"
                                                               Background="Red"
                                                               Header="{Binding Header}"

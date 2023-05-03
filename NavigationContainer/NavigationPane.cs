@@ -1,5 +1,8 @@
 ﻿using Shared;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace NavigationContainer
@@ -11,13 +14,18 @@ namespace NavigationContainer
         public static readonly DependencyProperty HeaderProperty =
                     DependencyProperty.Register("Header",
                     typeof(string),
-                    typeof(NavigationPane),
-                    new PropertyMetadata(""));
+                    typeof(NavigationContainer),
+                    new PropertyMetadata("", new PropertyChangedCallback(OnHeaderChanged)));
 
         public string Header
         {
             get { return (string)GetValue(HeaderProperty); }
             set { SetValue(HeaderProperty, value); }
+        }
+
+        private static void OnHeaderChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            //var control = (NavigationContainer)d;
         }
         #endregion
 
@@ -25,7 +33,7 @@ namespace NavigationContainer
         public static readonly DependencyProperty ItemTypeProperty =
                     DependencyProperty.Register("ItemType",
                     typeof(NavigationItemType?),
-                    typeof(NavigationPane),
+                    typeof(NavigationContainer),
                     new PropertyMetadata(null, new PropertyChangedCallback(OnItemTypeChanged)));
 
         public NavigationItemType? ItemType
@@ -34,9 +42,10 @@ namespace NavigationContainer
             set { SetValue(ItemTypeProperty, value); }
         }
 
+
         private static void OnItemTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            NavigationPane control = (NavigationPane)d;
+            //var control = (NavigationContainer)d;
         }
         #endregion
 
@@ -78,6 +87,49 @@ namespace NavigationContainer
             //var control = (NavigationPane)d;
         }
         #endregion
+
+        #region DP NavigationPaneModel
+        public static readonly DependencyProperty NavigationPaneModelProperty =
+                    DependencyProperty.Register("NavigationPaneModel",
+                    typeof(NavigationPaneModel),
+                    typeof(NavigationPane),
+                    new PropertyMetadata(null, new PropertyChangedCallback(OnNavigationPaneModelChanged)));
+
+        public NavigationPaneModel NavigationPaneModel
+        {
+            get { return (NavigationPaneModel)GetValue(NavigationPaneModelProperty); }
+            set { SetValue(NavigationPaneModelProperty, value); }
+        }
+
+        private static void OnNavigationPaneModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            //var control = (NavigationPane)d;
+        }
+        #endregion
+
+        #region DP IsExpanded
+        public static readonly DependencyProperty IsExpandedProperty =
+                    DependencyProperty.Register("IsExpanded",
+                    typeof(bool),
+                    typeof(NavigationPane),
+                    new PropertyMetadata(false, new PropertyChangedCallback(OnIsExpandedChanged)));
+
+        public bool IsExpanded
+        {
+            get { return (bool)GetValue(IsExpandedProperty); }
+            set { SetValue(IsExpandedProperty, value); }
+        }
+
+        private static async void OnIsExpandedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NavigationPane)d;
+
+            if (control.NavigationPaneModel != null)
+            {
+                await control.Load();
+            }
+        }
+        #endregion
         #endregion
 
         #region CTOR
@@ -85,6 +137,28 @@ namespace NavigationContainer
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(NavigationPane),
                 new FrameworkPropertyMetadata(typeof(NavigationPane)));
+        }
+        #endregion
+
+        #region Private Methods
+        private async Task Load()
+        {
+            if (NavigationPaneModel != null && NavigationPaneModel.DataSource != null)
+            {
+                var dataSource = NavigationPaneModel.DataSource(NavigationPaneModel.NavigationItemType);
+
+                List<NavigationEntity>? data = null;
+
+                if (dataSource != null)
+                {
+                    data = await Task.Run(() => dataSource);
+                }
+
+                if (data != null)
+                {
+                    Items = new ObservableCollection<NavigationEntity>(data);
+                }
+            }
         }
         #endregion
     }

@@ -9,7 +9,7 @@ namespace NavigationContainer
     public class NavigationContainer : _ControlBase
     {
         #region Private Fields
-        private static Repository repository = new Repository();
+        //private static Repository repository = new Repository();
         #endregion
 
         #region DP's
@@ -45,10 +45,10 @@ namespace NavigationContainer
             set { SetValue(NavigationPanesProperty, value); }
         }
 
-        private static async void OnNavigationPanesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnNavigationPanesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (NavigationContainer)d;
-            await control.Load();
+            control.Load();
         }
         #endregion
         #endregion
@@ -62,37 +62,26 @@ namespace NavigationContainer
         #endregion
 
         #region Private Methods
-        private async Task Load()
+        private void Load()
         {
             if (NavigationPanes != null)
             {
-                var items = new List<NavigationPane>();
+                ContainerItems = new List<NavigationPane>();
 
-                List<Task> tasks = new List<Task>(NavigationPanes.Count);
                 foreach (var navigationPaneModel in NavigationPanes)
                 {
-                    tasks.Add(LoadPane(navigationPaneModel, items));
-                }
+                    var navigationPane = new NavigationPane
+                    { 
+                        Header = navigationPaneModel.Header ?? "",
+                        ItemType = navigationPaneModel.NavigationItemType,
+                        NavigationPaneModel = navigationPaneModel
+                        
+                    };
+                    ContainerItems.Add(navigationPane);
 
-                await Task.WhenAll(tasks);
-
-                if (items != null)
-                {
-                    ContainerItems =  new List<NavigationPane>(items);
+                    navigationPane.IsExpanded = navigationPaneModel.IsExpanded;
                 }
             }
-        }
-
-        private async Task LoadPane(NavigationPaneModel navigationPaneModel, List<NavigationPane> containerItems)
-        {
-            // It's ok for data to be null here. There may be no data for that ItemType
-            var data = await Task.Run(() => repository.GetNavigationItems(navigationPaneModel.NavigationItemType));
-
-            containerItems.Add(new NavigationPane
-            {
-                Header = navigationPaneModel.Header ?? "",
-                Items = new ObservableCollection<NavigationEntity>(data)
-            });
         }
         #endregion
     }
