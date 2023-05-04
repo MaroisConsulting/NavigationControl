@@ -1,17 +1,11 @@
 ﻿using Shared;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace NavigationContainer
 {
     public class NavigationContainer : _ControlBase
     {
-        #region Private Fields
-        //private static Repository repository = new Repository();
-        #endregion
-
         #region DP's
         #region DP ContainerItems
         public static readonly DependencyProperty ContainerItemsProperty =
@@ -78,8 +72,6 @@ namespace NavigationContainer
                         
                     };
                     ContainerItems.Add(navigationPane);
-
-                    //navigationPane.IsExpanded = navigationPaneModel.IsExpanded;
                 }
             }
         }

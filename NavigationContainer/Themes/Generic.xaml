@@ -22,7 +22,7 @@
                                   BorderThickness="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  IsExpanded="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
+                                  IsExpanded="{Binding IsPaneExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
                             <Grid>
                                 <ListBox ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}"

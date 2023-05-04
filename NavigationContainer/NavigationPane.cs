@@ -1,5 +1,4 @@
 ﻿using Shared;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -65,26 +64,6 @@ namespace NavigationContainer
         private static void OnItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (NavigationPane)d;
-            control.BusyIndicatorVisibility = Visibility.Collapsed;
-        }
-        #endregion
-
-        #region DP BusyIndicatorVisibility
-        public static readonly DependencyProperty BusyIndicatorVisibilityProperty =
-                    DependencyProperty.Register("BusyIndicatorVisibility",
-                    typeof(Visibility),
-                    typeof(NavigationPane),
-                    new PropertyMetadata(Visibility.Visible, new PropertyChangedCallback(OnBusyIndicatorVisibilityChanged)));
-
-        public Visibility BusyIndicatorVisibility
-        {
-            get { return (Visibility)GetValue(BusyIndicatorVisibilityProperty); }
-            set { SetValue(BusyIndicatorVisibilityProperty, value); }
-        }
-
-        private static void OnBusyIndicatorVisibilityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            //var control = (NavigationPane)d;
         }
         #endregion
 
@@ -100,33 +79,55 @@ namespace NavigationContainer
             get { return (NavigationPaneModel)GetValue(NavigationPaneModelProperty); }
             set { SetValue(NavigationPaneModelProperty, value); }
         }
-
-        private static void OnNavigationPaneModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            //var control = (NavigationPane)d;
-        }
-        #endregion
-
-        #region DP IsExpanded
-        public static readonly DependencyProperty IsExpandedProperty =
-                    DependencyProperty.Register("IsExpanded",
-                    typeof(bool),
-                    typeof(NavigationPane),
-                    new PropertyMetadata(false, new PropertyChangedCallback(OnIsExpandedChanged)));
-
-        public bool IsExpanded
-        {
-            get { return (bool)GetValue(IsExpandedProperty); }
-            set { SetValue(IsExpandedProperty, value); }
-        }
-
-        private static async void OnIsExpandedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void OnNavigationPaneModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (NavigationPane)d;
 
-            if (control.NavigationPaneModel != null)
+            /***********************************************************
+             * See the MainWindow's code behind where the model for
+             * Projects has IsExpanded set to True.
+             * 
+             * This code below checks that, and if expanded, sets the
+             * IsPaneExpanded DP accordingly, which triggers load.
+             * 
+             * See the IsPaneExpanded DP below
+             * 
+             **********************************************************/
+            if (control.NavigationPaneModel.IsExpanded)
             {
-                await control.Load();
+                control.IsPaneExpanded = true;
+            }
+        }
+        #endregion
+
+        #region DP IsPaneExpanded
+        public static readonly DependencyProperty IsPaneExpandedProperty =
+                    DependencyProperty.Register("IsPaneExpanded",
+                    typeof(bool),
+                    typeof(NavigationPane),
+                    new PropertyMetadata(false, new PropertyChangedCallback(OnIsPaneExpandedChanged)));
+
+        public bool IsPaneExpanded
+        {
+            get { return (bool)GetValue(IsPaneExpandedProperty); }
+            set { SetValue(IsPaneExpandedProperty, value); }
+        }
+
+        private static async void OnIsPaneExpandedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (NavigationPane)d;
+
+            // This is getting called, but...
+            if (control.IsPaneExpanded)
+            {
+
+                // Put a breakpoint here. NavigationPaneModel is NULL when the pane is
+                // expanded by the user in the UI. When it's expanded from OnNavigationPaneModelChanged
+                // the the NavigationPaneModel becomes null
+                if (control.NavigationPaneModel != null)
+                {
+                    await control.Load();
+                }
             }
         }
         #endregion

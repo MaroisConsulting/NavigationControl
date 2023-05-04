@@ -1,5 +1,4 @@
 ﻿using Shared;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
@@ -36,8 +35,8 @@ namespace Navigation
                 {
                     Header = "Projects", 
                     NavigationItemType = NavigationItemType.Project, 
-                    IsExpanded = true,
-                    DataSource = Repository.GetNavigationItems
+                    DataSource = Repository.GetNavigationItems,
+                    IsExpanded = true //<=== THIS TRIGGERS LOAD
                 },
 
                 new NavigationPaneModel
@@ -51,7 +50,8 @@ namespace Navigation
                 {
                     Header = "Companies" , 
                     NavigationItemType = NavigationItemType.Company,
-                    DataSource = Repository.GetNavigationItems
+                    DataSource = Repository.GetNavigationItems,
+                    IsExpanded = true //<=== THIS TRIGGERS LOAD
                 },
 
                 new NavigationPaneModel
