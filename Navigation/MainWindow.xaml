@@ -20,11 +20,11 @@
                                  Grid.Column="0"
                                  Margin="2"
                                  Padding="0"
-                                 Background="Blue"
-                                 BorderBrush="Green"
+                                 BorderBrush="LightGray"
                                  BorderThickness="1"
                                  NavigationPanes="{Binding NavigationPaneInfos}"
-                                 HorizontalAlignment="Stretch"/>
+                                 HorizontalAlignment="Stretch"
+                                 MinWidth="250"/>
 
         <GridSplitter Grid.Row="3"
                       Grid.Column="1"

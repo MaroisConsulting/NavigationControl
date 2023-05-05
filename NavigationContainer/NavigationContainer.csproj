@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Projects\Marois.Framework\Marois.Framework.Core\Marois.Framework.Core.WPF.Controls\Marois.Framework.Core.WPF.Controls\Marois.Framework.Core.WPF.Controls.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 

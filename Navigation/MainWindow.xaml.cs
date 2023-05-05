@@ -35,30 +35,29 @@ namespace Navigation
                 {
                     Header = "Projects", 
                     NavigationItemType = NavigationItemType.Project, 
-                    DataSource = Repository.GetNavigationItems,
-                    IsExpanded = true //<=== THIS TRIGGERS LOAD
+                    DataSource = Functional.Apply(Repository.GetNavigationItems, NavigationItemType.Project),
+                    IsExpanded = true
                 },
 
                 new NavigationPaneModel
                 {
                     Header = "Inventory", 
                     NavigationItemType = NavigationItemType.Inventory,
-                    DataSource = Repository.GetNavigationItems
+                    DataSource = Functional.Apply(Repository.GetNavigationItems, NavigationItemType.Inventory),
                 },
 
                 new NavigationPaneModel
                 {
                     Header = "Companies" , 
                     NavigationItemType = NavigationItemType.Company,
-                    DataSource = Repository.GetNavigationItems,
-                    IsExpanded = true //<=== THIS TRIGGERS LOAD
+                    DataSource = Functional.Apply(Repository.GetNavigationItems, NavigationItemType.Company),
                 },
 
                 new NavigationPaneModel
                 {
                     Header = "Employees", 
                     NavigationItemType = NavigationItemType.Employee,
-                    DataSource = Repository.GetNavigationItems
+                    DataSource = Functional.Apply(Repository.GetNavigationItems, NavigationItemType.Employee),
                 }
             };
         }

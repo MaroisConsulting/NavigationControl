@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavigationContainer", "Navi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csproj", "{38DEB0F1-0F71-4AC3-BAD0-4F85583E56DF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Marois.Framework.Core.WPF.Controls", "..\..\..\..\..\Projects\Marois.Framework\Marois.Framework.Core\Marois.Framework.Core.WPF.Controls\Marois.Framework.Core.WPF.Controls\Marois.Framework.Core.WPF.Controls.csproj", "{AB7EC950-D1C1-4132-B575-CBEA19D67734}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{38DEB0F1-0F71-4AC3-BAD0-4F85583E56DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38DEB0F1-0F71-4AC3-BAD0-4F85583E56DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38DEB0F1-0F71-4AC3-BAD0-4F85583E56DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB7EC950-D1C1-4132-B575-CBEA19D67734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB7EC950-D1C1-4132-B575-CBEA19D67734}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB7EC950-D1C1-4132-B575-CBEA19D67734}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB7EC950-D1C1-4132-B575-CBEA19D67734}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

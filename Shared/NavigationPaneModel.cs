@@ -23,6 +23,6 @@
         /// <summary>
         /// A delegate that represents the source of the data
         /// </summary>
-        public Func<NavigationItemType, List<NavigationEntity>>? DataSource { get; set; }
+        public Func<List<NavigationEntity>>? DataSource { get; set; }
     }
 }

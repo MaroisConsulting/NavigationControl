@@ -83,14 +83,6 @@ namespace NavigationContainer
         {
             var control = (NavigationPane)d;
 
-            /***********************************************************
-             * This code checks to see if the Model's IsExpaned is set to True, 
-             * and if it is, sets the IsPaneExpanded DP accordingly, which triggers 
-             * load. below
-             * 
-             * See the IsPaneExpanded DP below
-             * 
-             **********************************************************/
             if (control.NavigationPaneModel.IsExpanded)
             {
                 control.IsPaneExpanded = true;
@@ -118,14 +110,6 @@ namespace NavigationContainer
             // This is getting called, but...
             if (control.IsPaneExpanded)
             {
-
-                /********************************************************
-                * Put a breakpoint here and expanded the pane manually.  
-                * NavigationPaneModel will be NULL 
-                * 
-                * When the it's expanded from OnNavigationPaneModelChanged the 
-                * the NavigationPaneModel is Ok
-                ********************************************************/
                 if (control.NavigationPaneModel != null)
                 {
                     await control.Load();
@@ -148,7 +132,7 @@ namespace NavigationContainer
         {
             if (NavigationPaneModel != null && NavigationPaneModel.DataSource != null)
             {
-                var dataSource = NavigationPaneModel.DataSource(NavigationPaneModel.NavigationItemType);
+                var dataSource = NavigationPaneModel.DataSource();
 
                 List<NavigationEntity>? data = null;
 
