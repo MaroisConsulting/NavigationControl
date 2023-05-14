@@ -16,22 +16,26 @@
                     break;
 
                 case NavigationItemType.Company:
-                    for (int i = 0; i < 75; i++)
+                    for (int i = 1; i < 76; i++)
                     {
                         results.Add(new NavigationEntity()
                         {
-                            Caption = $"Company {i}"
+                            Id = i,
+                            Caption = $"Company {i}",
+                            ItemType= NavigationItemType.Company
                         });
                     }
 
                     break;
 
                 case NavigationItemType.Project:
-                    for (int i = 0; i < 150; i++)
+                    for (int i = 1; i < 151; i++)
                     {
                         results.Add(new NavigationEntity()
                         {
-                            Caption = $"Project {i}"
+                            Id = i,
+                            Caption = $"Project {i}",
+                            ItemType = NavigationItemType.Project
                         });
                     }
 
@@ -39,15 +43,20 @@
 
                 case NavigationItemType.Employee:
 
-                    for (int i = 0; i < 80; i++)
+                    for (int i  =1; i < 81; i++)
                     {
                         results.Add(new NavigationEntity()
                         {
-                            Caption = $"Employee {i}"
+                            Id = i,
+                            Caption = $"Employee {i}",
+                            ItemType = NavigationItemType.Employee
                         });
                     }
                     break;
             }
+
+            // Simulate a long runnning query
+            //Thread.Sleep(3000);
 
             return results;
         }

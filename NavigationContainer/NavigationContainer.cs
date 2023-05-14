@@ -1,11 +1,26 @@
-﻿using Shared;
+﻿using CommunityToolkit.Mvvm.Input;
+using Shared;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 
 namespace NavigationContainer
 {
     public class NavigationContainer : _ControlBase
     {
+        #region Commands
+        private ICommand? _NavigationItemSelectedCommand;
+        public ICommand NavigationItemSelectedCommand
+        {
+            get
+            {
+                if (_NavigationItemSelectedCommand == null)
+                    _NavigationItemSelectedCommand = new RelayCommand<NavigationEventArgs>(p => NavigationItemSelectedExecuted(p), p => NavigationItemSelectedCanExecute(p));
+                return _NavigationItemSelectedCommand;
+            }
+        }
+        #endregion
+
         #region DP's
         #region DP ContainerItems
         public static readonly DependencyProperty ContainerItemsProperty =
@@ -47,6 +62,30 @@ namespace NavigationContainer
         #endregion
         #endregion
 
+        #region Routed Events
+        #region NavigationItemSelectedEvent
+        public static readonly RoutedEvent NavigationItemSelectedEvent =
+                    EventManager.RegisterRoutedEvent("NavigationItemSelected",
+                    RoutingStrategy.Tunnel,
+                    typeof(RoutedEventHandler),
+                    typeof(NavigationContainer));
+
+
+        public event RoutedEventHandler NavigationItemSelected
+        {
+            add { AddHandler(NavigationItemSelectedEvent, value); }
+            remove { RemoveHandler(NavigationItemSelectedEvent, value); }
+        }
+
+        private void RaiseNavigationItemSelectedEvent(NavigationEntity entity)
+        {
+            var args = new NavigationEventArgs(NavigationItemSelectedEvent, entity);
+            RaiseEvent(args);
+        }
+        #endregion
+
+        #endregion
+
         #region CTOR
         static NavigationContainer()
         {
@@ -67,13 +106,22 @@ namespace NavigationContainer
                     var navigationPane = new NavigationPane
                     { 
                         Header = navigationPaneModel.Header ?? "",
-                        ItemType = navigationPaneModel.NavigationItemType,
                         NavigationPaneModel = navigationPaneModel
                         
                     };
                     ContainerItems.Add(navigationPane);
                 }
             }
+        }
+
+        private bool NavigationItemSelectedCanExecute(NavigationEventArgs args)
+        {
+            return true;
+        }
+
+        private void NavigationItemSelectedExecuted(NavigationEventArgs args)
+        {
+            RaiseNavigationItemSelectedEvent(args.NavigationEntity);
         }
         #endregion
     }

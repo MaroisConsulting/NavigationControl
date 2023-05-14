@@ -1,7 +1,10 @@
-﻿using Shared;
+﻿using CommunityToolkit.Mvvm.Input;
+using NavigationContainer;
+using Shared;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Navigation
 {
@@ -22,6 +25,18 @@ namespace Navigation
                 }
             }
         }
+
+        private ICommand? _NavigationItemSelectedCommand;
+        public ICommand NavigationItemSelectedCommand
+        {
+            get
+            {
+                if (_NavigationItemSelectedCommand == null)
+                    _NavigationItemSelectedCommand = new RelayCommand<NavigationEventArgs>(p => NavigationItemSelectedExecuted(p), p => NavigationItemSelectedCanExecute(p));
+                return _NavigationItemSelectedCommand;
+            }
+        }
+
 
         public MainWindow()
         {
@@ -60,6 +75,17 @@ namespace Navigation
                     DataSource = Functional.Apply(Repository.GetNavigationItems, NavigationItemType.Employee),
                 }
             };
+        }
+
+        private bool NavigationItemSelectedCanExecute(NavigationEventArgs args)
+        {
+            return true;
+        }
+
+        private void NavigationItemSelectedExecuted(NavigationEventArgs args)
+        {
+            var message = $"{args.NavigationEntity.ItemType} {args.NavigationEntity.Id} selected";
+            MessageBox.Show(message, "Item Selected", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         protected void RaisePropertyChanged(string properyName)

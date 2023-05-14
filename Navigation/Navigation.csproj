@@ -8,11 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Projects\Marois.Framework\Marois.Framework.Core\Marois.Framework.Core.WPF.Controls\Marois.Framework.Core.WPF.Controls\Marois.Framework.Core.WPF.Controls.csproj" />
     <ProjectReference Include="..\NavigationContainer\NavigationContainer.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>

@@ -4,6 +4,8 @@ namespace Shared
 {
     public class NavigationEntity : _EntityBase
     {
+        public int Id { get; set; } 
+
         private string? _Caption;
         public string Caption
         {
