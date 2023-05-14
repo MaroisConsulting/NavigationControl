@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.Input;
-using Marois.Framework.Core.WPF.Controls;
 using Shared;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -79,7 +78,7 @@ namespace NavigationContainer
 
         #region DP TextDecorations
         public static readonly DependencyProperty TextDecorationsProperty =
-            Inline.TextDecorationsProperty.AddOwner(typeof(MaroisHyperlink));
+            Inline.TextDecorationsProperty.AddOwner(typeof(Hyperlink));
 
         public TextDecorationCollection TextDecorations
         {
@@ -92,7 +91,7 @@ namespace NavigationContainer
         public static readonly DependencyProperty HoverBrushProperty =
                     DependencyProperty.Register("HoverBrush",
                     typeof(SolidColorBrush),
-                    typeof(MaroisHyperlink),
+                    typeof(Hyperlink),
                     new PropertyMetadata(new SolidColorBrush(Colors.Green)));
 
         public SolidColorBrush HoverBrush
