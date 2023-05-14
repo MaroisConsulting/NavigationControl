@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using Shared;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -13,6 +14,15 @@ namespace NavigationContainer
 {
     public class NavigationPane : _ControlBase
     {
+        #region Private Fields
+        // Stores the value of the DP IsPaneExpanded during initialization. See
+        // comments in the DP IsPaneExpanded 
+        private bool _isPaneExpanded = false;
+
+        // Set to true after the control has finished initialising
+        private bool _isInitialized = false;
+        #endregion
+
         #region Commands
         private ICommand? _ItemClickedCommand;
         public ICommand ItemClickedCommand
@@ -124,6 +134,26 @@ namespace NavigationContainer
         }
         #endregion
 
+        // UNCOMMENT ONE THE LOADING PROBLEM IS FIXED
+        //#region DP IsLoading
+        //public static readonly DependencyProperty IsLoadingProperty =
+        //            DependencyProperty.Register("IsLoading",
+        //            typeof(bool),
+        //            typeof(NavigationPane),
+        //            new PropertyMetadata(true, new PropertyChangedCallback(OnIsLoadingChanged)));
+
+        //public bool IsLoading
+        //{
+        //    get { return (bool)GetValue(IsLoadingProperty); }
+        //    set { SetValue(IsLoadingProperty, value); }
+        //}
+
+        //private static void OnIsLoadingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    var control = (NavigationPane)d;
+        //}
+        //#endregion
+
         #region DP IsPaneExpanded
         public static readonly DependencyProperty IsPaneExpandedProperty =
                     DependencyProperty.Register("IsPaneExpanded",
@@ -141,10 +171,24 @@ namespace NavigationContainer
         {
             var control = (NavigationPane)d;
 
-            // This is getting called, but...
-            if (control.IsPaneExpanded)
+            if (!control._isInitialized)
             {
-                if (control.NavigationPaneModel != null)
+                // If here, the control is still being initialized. Store the
+                // IsPaneExpanded setting for later use when the control's init
+                // has finished
+                control._isPaneExpanded = control.IsPaneExpanded;
+
+                // Since the control is not loaded, there is nothing to show. But
+                // since the IsExpanded can be set from the Window, and it's bound,
+                // it's possible for the expander arrow to show open even though
+                // there's nothing there. So force the expander to show as collapsed
+                control.IsPaneExpanded = false;
+            }
+            else
+            {
+                // If here, the control has already been initialized, so go ahead
+                // and call load
+                if (control.IsPaneExpanded)
                 {
                     await control.Load();
                 }
@@ -175,11 +219,16 @@ namespace NavigationContainer
         #endregion
         #endregion
 
-        #region CTOR
+        #region CTORs
         static NavigationPane()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(NavigationPane),
                 new FrameworkPropertyMetadata(typeof(NavigationPane)));
+        }
+
+        public NavigationPane()
+        {
+            Initialized += NavigationPane_Initialized;
         }
         #endregion
 
@@ -231,7 +280,27 @@ namespace NavigationContainer
                 {
                     Items = new ObservableCollection<NavigationEntity>(data);
                 }
+
+                // UNCOMMENT ONE THE LOADING PROBLEM IS FIXED
+                //IsLoading = false;
             }
+        }
+        #endregion
+
+        #region Event Handlers
+        private async void NavigationPane_Initialized(object? sender, EventArgs e)
+        {
+            // If the control's IsPaneExpanded was set from the parent, then
+            // the IsPandedExpanded DP would have set _isExpandedSet = true.
+            if (_isPaneExpanded)
+            {
+                // Now that the control has finished initializing, go ahead
+                // and call load
+                await Load();
+                IsPaneExpanded = true;
+            }
+
+            _isInitialized = true;
         }
         #endregion
     }

@@ -70,7 +70,6 @@ namespace NavigationContainer
                     typeof(RoutedEventHandler),
                     typeof(NavigationContainer));
 
-
         public event RoutedEventHandler NavigationItemSelected
         {
             add { AddHandler(NavigationItemSelectedEvent, value); }
@@ -83,7 +82,6 @@ namespace NavigationContainer
             RaiseEvent(args);
         }
         #endregion
-
         #endregion
 
         #region CTOR

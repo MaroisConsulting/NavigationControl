@@ -56,7 +56,7 @@
             }
 
             // Simulate a long runnning query
-            //Thread.Sleep(3000);
+            Thread.Sleep(3000);
 
             return results;
         }
