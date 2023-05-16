@@ -123,76 +123,65 @@ namespace NavigationContainer
             get { return (NavigationPaneModel)GetValue(NavigationPaneModelProperty); }
             set { SetValue(NavigationPaneModelProperty, value); }
         }
-        private static async void OnNavigationPaneModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnNavigationPaneModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (NavigationPane)d;
-
-            if (control.NavigationPaneModel.IsExpanded)
+            var model = e.NewValue as NavigationPaneModel;
+            if (model != null)
             {
-                control.IsPaneExpanded = true;
+                // Store the expanded setting for later use in Initialize
+                control._isPaneExpanded = model.IsExpanded;
             }
         }
         #endregion
 
-        // UNCOMMENT ONE THE LOADING PROBLEM IS FIXED
-        //#region DP IsLoading
-        //public static readonly DependencyProperty IsLoadingProperty =
-        //            DependencyProperty.Register("IsLoading",
-        //            typeof(bool),
-        //            typeof(NavigationPane),
-        //            new PropertyMetadata(true, new PropertyChangedCallback(OnIsLoadingChanged)));
+        #region DP IsLoading
+        public static readonly DependencyProperty IsLoadingProperty =
+                    DependencyProperty.Register("IsLoading",
+                    typeof(bool),
+                    typeof(NavigationPane),
+                    new PropertyMetadata(true, new PropertyChangedCallback(OnIsLoadingChanged)));
 
-        //public bool IsLoading
-        //{
-        //    get { return (bool)GetValue(IsLoadingProperty); }
-        //    set { SetValue(IsLoadingProperty, value); }
-        //}
+        public bool IsLoading
+        {
+            get { return (bool)GetValue(IsLoadingProperty); }
+            set { SetValue(IsLoadingProperty, value); }
+        }
 
-        //private static void OnIsLoadingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    var control = (NavigationPane)d;
-        //}
-        //#endregion
+        private static void OnIsLoadingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            //var control = (NavigationPane)d;
+        }
+        #endregion
 
         #region DP IsPaneExpanded
         public static readonly DependencyProperty IsPaneExpandedProperty =
-                    DependencyProperty.Register("IsPaneExpanded",
-                    typeof(bool),
-                    typeof(NavigationPane),
-                    new PropertyMetadata(false, new PropertyChangedCallback(OnIsPaneExpandedChanged)));
+                DependencyProperty.Register("IsPaneExpanded",
+                typeof(bool),
+                typeof(NavigationPane),
+                new PropertyMetadata(
+                    defaultValue: false,
+                    propertyChangedCallback: new PropertyChangedCallback(OnIsPaneExpandedChanged),
+                    coerceValueCallback: new CoerceValueCallback(CoerceIsPaneExpanded)
+        ));
 
-        public bool IsPaneExpanded
-        {
-            get { return (bool)GetValue(IsPaneExpandedProperty); }
-            set { SetValue(IsPaneExpandedProperty, value); }
-        }
-
-        private static async void OnIsPaneExpandedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnIsPaneExpandedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (NavigationPane)d;
+            control._isPaneExpanded = (bool)e.NewValue;
+            control.CoerceValue(IsPaneExpandedProperty);
 
-            if (!control._isInitialized)
+            if (control._isInitialized && control._isPaneExpanded)
             {
-                // If here, the control is still being initialized. Store the
-                // IsPaneExpanded setting for later use when the control's init
-                // has finished
-                control._isPaneExpanded = control.IsPaneExpanded;
+                _ = control.Load();
+            }
+        }
 
-                // Since the control is not loaded, there is nothing to show. But
-                // since the IsExpanded can be set from the Window, and it's bound,
-                // it's possible for the expander arrow to show open even though
-                // there's nothing there. So force the expander to show as collapsed
-                control.IsPaneExpanded = false;
-            }
-            else
-            {
-                // If here, the control has already been initialized, so go ahead
-                // and call load
-                if (control.IsPaneExpanded)
-                {
-                    await control.Load();
-                }
-            }
+        private static object CoerceIsPaneExpanded(DependencyObject d, object baseValue)
+        {
+            var control = (NavigationPane)d;
+            var newVal = control._isInitialized ? baseValue : (object)false;
+            return newVal;
         }
         #endregion
         #endregion
@@ -267,40 +256,40 @@ namespace NavigationContainer
         {
             if (NavigationPaneModel != null && NavigationPaneModel.DataSource != null)
             {
-                var dataSource = NavigationPaneModel.DataSource();
-
                 List<NavigationEntity>? data = null;
 
-                if (dataSource != null)
+                await Task.Run(() => 
                 {
-                    data = await Task.Run(() => dataSource);
-                }
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        data = NavigationPaneModel.DataSource();
+                    });
+                    // This throws with
+                    //
+                    //  "The calling thread cannot access this object because a different thread owns it.'"
+                    //
+                    // So I need to figure out how to call the delegate async
+                    //data = NavigationPaneModel.DataSource();
+                });
 
                 if (data != null)
                 {
                     Items = new ObservableCollection<NavigationEntity>(data);
                 }
-
-                // UNCOMMENT ONE THE LOADING PROBLEM IS FIXED
-                //IsLoading = false;
             }
         }
         #endregion
 
         #region Event Handlers
-        private async void NavigationPane_Initialized(object? sender, EventArgs e)
+        private void NavigationPane_Initialized(object? sender, EventArgs e)
         {
-            // If the control's IsPaneExpanded was set from the parent, then
-            // the IsPandedExpanded DP would have set _isExpandedSet = true.
-            if (_isPaneExpanded)
-            {
-                // Now that the control has finished initializing, go ahead
-                // and call load
-                await Load();
-                IsPaneExpanded = true;
-            }
-
             _isInitialized = true;
+            CoerceValue(IsPaneExpandedProperty);
+
+            if (_isPaneExpanded) //<====== 2. THIS IS NEVER TRUE
+            {
+                _ = Load();
+            }
         }
         #endregion
     }

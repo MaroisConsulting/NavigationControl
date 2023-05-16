@@ -208,7 +208,7 @@
                                          Grid.Column="0"
                                          HorizontalContentAlignment="Left"
                                          VerticalContentAlignment="Center"
-                                         Text="{Binding SearchText, Mode=TwoWay}"/>
+                                         />
 
                                 <Button Grid.Row="0"
                                         Grid.Column="1"
